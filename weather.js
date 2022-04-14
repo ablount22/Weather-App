@@ -1,36 +1,43 @@
+const enterZipcode = document.getElementById('show-weather')
+const weather = document.getElementById('zipcode')
+let name = document.getElementById("city-name")
+let Latitude = document.getElementById("lat")
+let Longitude = document.getElementById("lon")
+let main = document.getElementById("weather-main")
+let description = document.getElementById("weather-desc")
+let speed= document.getElementById("wind-speed")
+let degree = document.getElementById("wind-degree")
+let current = document.getElementById("temp-current")
+let mininum = document.getElementById("temp-minimum")
+let maximum = document.getElementById("temp-maximum")
+let humidity = document.getElementById("humidty")
 
-const name = document.getElementById("city-name")
-const Latitude = document.getElementById("lat")
-const Longitude = document.getElementById("lon")
-const main = document.getElementById("weather-main")
-const description = document.getElementById("weather-desc")
-const speed= document.getElementById("wind-speed")
-const degree = document.getElementById("wind-degree")
-const current = document.getElementById("temp-current")
-const mininum = document.getElementById("temp-minimum")
-const maximum = document.getElementById("temp-maximum")
-const humidity = document.getElementById("humidty")
+async function fetchWeather (zipcode) {
+fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${zipcode},US&units=imperial&appid=17987cabec801718dc2cc7e0b67b07cd`).
+then((response) => response.json()).then((data) => displayWeather(data))
 
-function weatherBalloon( cityID ) {
-  var key = '{17987cabec801718dc2cc7e0b67b07cd}';
-  fetch('https://api.openweathermap.org/data/2.5/weather?id=' + cityID+ '&appid=' + key)
-  .then(function(resp) { return resp.json() }) // Convert data to json
-  .then(function(data) {
-    drawWeather.log(data);
-  })
-  .catch(function() {
-    // catch any errors
-  });
+
 }
 
-window.onload = function() {
-  weatherBalloon( 6167865 );
-}
-function drawWeather( d ) {
-	var celcius = Math.round(parseFloat(d.main.temp)-273.15);
-	var fahrenheit = Math.round(((parseFloat(d.main.temp)-273.15)*1.8)+32);
+enterZipcode.addEventListener("click", () => fetchWeather(weather.value))
 
-	document.getElementById('description').innerHTML = d.weather[0].description;
-	document.getElementById('temp').innerHTML = celcius + '&deg;';
-	document.getElementById('location').innerHTML = d.name;
+
+
+
+ function displayWeather (data) {
+console.log(data)
+name.innerHTML=data.name
+Latitude.innerHTML=data.coord.lat
+Longitude.innerHTML=data.coord.lon
+main.innerHTML=data.weather[0].main
+description.innerHTML=data.weather[0].description
+speed.innerHTML=data.wind.speed
+degree.innerHTML=data.wind.deg
+current.innerHTML=data.main.temp
+minimum.innerHTML=data.main.temp_min
+maximum.innerHTML=data.main.temp_max
+humidity.innerHTML=data.main.humid
+
+console.log(weather.value);
+
 }
